@@ -17,8 +17,8 @@ RUN apt-get -y install wget man java-common
 RUN wget --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/8u11-b12/jdk-8u11-linux-x64.tar.gz -O /tmp/jdk-8u11-linux-x64.tar.gz
 RUN if [ ! -d '/usr/lib/jvm' ]; then mkdir /usr/lib/jvm; fi
-RUN tar -zxf /tmp/jdk-8u11-linux-x64.tar.gz -C /usr/lib/jvm &&
-    chown -R root:root $JVM_ROOT_PATH $$
+RUN tar -zxf /tmp/jdk-8u11-linux-x64.tar.gz -C /usr/lib/jvm && \
+    chown -R root:root $JVM_ROOT_PATH && \
     rm /tmp/jdk-8u11-linux-x64.tar.gz
 
 ENV JVM_ROOT_PATH /usr/lib/jvm
