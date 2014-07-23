@@ -1,0 +1,28 @@
+FROM ubuntu:trusty
+MAINTAINER Dirk Franssen "dirk.franssen@gmail.com"
+
+# One could force a daily or weekly upgrade of all
+# packages by changing the REFRESHED_AT date, from time to time.
+# Otherwise the first lines would be cached by docker and
+# one would always use non up-to-date versions of the OS
+
+ENV REFRESHED_AT 2014-07-23
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get -y install wget man java-common
+
+# Installs JDK 8 (8u11-b12 to be exact :-))
+# I personally prefer not to depend on a ppa package to install 'a version' of jdk1.8
+RUN wget --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    http://download.oracle.com/otn-pub/java/jdk/8u11-b12/jdk-8u11-linux-x64.tar.gz -O /tmp/jdk-8u11-linux-x64.tar.gz
+RUN if [ ! -d '/usr/lib/jvm' ]; then mkdir /usr/lib/jvm; fi
+RUN tar -zxf /tmp/jdk-8u11-linux-x64.tar.gz -C /usr/lib/jvm &&
+    chown -R root:root $JVM_ROOT_PATH $$
+    rm /tmp/jdk-8u11-linux-x64.tar.gz
+
+ENV JVM_ROOT_PATH /usr/lib/jvm
+ENV JAVA_HOME $JVM_ROOT_PATH/$JAVA_ALIAS
+
+#see other base image for the java update alternative way. Here just in PATH env
+ENV PATH $JAVA_HOME/bin:$PATH
