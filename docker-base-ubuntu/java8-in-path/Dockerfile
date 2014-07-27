@@ -8,15 +8,16 @@ MAINTAINER Dirk Franssen "dirk.franssen@gmail.com"
 
 ENV REFRESHED_AT 2014-07-23
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get -y install wget man java-common
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get -y install wget man java-common && \
+    apt-get clean
 
 ENV JVM_ROOT_PATH /usr/lib/jvm
 RUN if [ ! -d $JVM_ROOT_PATH ]; then mkdir $JVM_ROOT_PATH; fi
 
-# Installs JDK 8 (8u11-b12 to be exact :-))
 # I personally prefer not to depend on a ppa package to install 'a version' of jdk1.8
+# This will install JDK1.8 (8u11-b12 to be exact :-))
 RUN wget --header "Cookie: oraclelicense=accept-securebackup-cookie" \
     http://download.oracle.com/otn-pub/java/jdk/8u11-b12/jdk-8u11-linux-x64.tar.gz -O /tmp/jdk-8u11-linux-x64.tar.gz
 RUN tar -zxf /tmp/jdk-8u11-linux-x64.tar.gz -C $JVM_ROOT_PATH && \
@@ -26,4 +27,5 @@ RUN tar -zxf /tmp/jdk-8u11-linux-x64.tar.gz -C $JVM_ROOT_PATH && \
 ENV JAVA_HOME $JVM_ROOT_PATH/jdk1.8.0_11
 ENV PATH $JAVA_HOME/bin:$PATH
 
-#see other base image for the java update alternative way. Here just in PATH env
+#Note: Here it is just set in the PATH env, because this image is 175MB less than the update-alternatives one.
+#See https://github.com/dfranssen/docker-files/tree/master/docker-base-ubuntu/java8-update-alternatives

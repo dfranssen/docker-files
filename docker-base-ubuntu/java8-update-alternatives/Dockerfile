@@ -28,8 +28,9 @@ ENV JAVA_HOME $JVM_ROOT_PATH/$JAVA_ALIAS
 
 # But doing it the alternative way :-)
 # STEP 1 - get the dependencies to configure this java version
-ADD https://raw.githubusercontent.com/dfranssen/docker-files/master/docker-base-ubuntu/java8-update-alternatives/scripts/.$JAVA_ALIAS.jinfo $JVM_ROOT_PATH/.$JAVA_ALIAS.jinfo
-ADD https://raw.githubusercontent.com/dfranssen/docker-files/master/docker-base-ubuntu/java8-update-alternatives/scripts/update-alternative-$JAVA_ALIAS.sh $JVM_ROOT_PATH/update-alternative-$JAVA_ALIAS.sh
+ADD scripts/.$JAVA_ALIAS.jinfo $JVM_ROOT_PATH/.$JAVA_ALIAS.jinfo && \
+    scripts/update-alternative-$JAVA_ALIAS.sh $JVM_ROOT_PATH/update-alternative-$JAVA_ALIAS.sh
+    
 # STEP 2 - update and set alternatives via script (and remove script afterwards)
 RUN chown -R root:root $JVM_ROOT_PATH && \
     chmod 655 $JVM_ROOT_PATH/update-alternative-$JAVA_ALIAS.sh && \
